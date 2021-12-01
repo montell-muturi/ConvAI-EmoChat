@@ -3,30 +3,137 @@ import 'package:emochat/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final List<Widget> screenList = <Widget>[
-      const ScreenA(),
-      const ScreenB(),
-      const ScreenC(),
-    ];
-    PageController controller = PageController();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
 
-    return SafeArea(
-      child: Stack(
-        children: [
-          PageView.builder(
-              itemCount: screenList.length,
-              controller: controller,
-              itemBuilder: (context, index) {
-                return screenList[index];
-              }),
-          const ActionBar()
-        ],
-      ),
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  PageController controller = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(() {
+      if (controller.page!.round() != _currentPage) {
+        setState(() {
+          _currentPage = controller.page!.round();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ScrollConfiguration(
+          behavior: NoScrollGlow(),
+          child: PageView(
+            controller: controller,
+            children: const [
+              ScreenA(),
+              ScreenB(),
+              ScreenC(),
+            ],
+          ),
+        ),
+        FutureBuilder(
+          future: Future.value(true),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(28, 0, 16, 16),
+                child: Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignupScreen()));
+                        },
+                        child: const Text(
+                          'SKIP',
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        )),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: _currentPage == 0 ? 20 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Palette.primaryDark),
+                        ),
+                        const SizedBox(width: 4),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: _currentPage == 1 ? 20 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Palette.primaryDark),
+                        ),
+                        const SizedBox(width: 4),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: _currentPage == 2 ? 20 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Palette.primaryDark),
+                        )
+                      ],
+                    ),
+                    const Spacer(),
+                    Container(
+                      decoration: const BoxDecoration(
+                          color: Palette.primary, shape: BoxShape.circle),
+                      child: InkWell(
+                        splashColor: Palette.secondary,
+                        child: _currentPage == 2
+                            ? IconButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SignupScreen())),
+                                icon: const Icon(Icons.check))
+                            : IconButton(
+                                onPressed: () {
+                                  controller.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 400),
+                                      curve: Curves.ease);
+                                  _currentPage += 1;
+                                },
+                                icon: const Icon(Icons.chevron_right)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 }
@@ -149,74 +256,10 @@ class ScreenC extends StatelessWidget {
   }
 }
 
-class ActionBar extends StatefulWidget {
-  const ActionBar({Key? key}) : super(key: key);
-
+class NoScrollGlow extends ScrollBehavior {
   @override
-  State<ActionBar> createState() => _ActionBarState();
-}
-
-class _ActionBarState extends State<ActionBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(28, 0, 16, 16),
-        child: Row(
-          children: [
-            const Text(
-              'SKIP',
-              style: TextStyle(fontSize: 18),
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 20,
-                  height: 8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Palette.primaryDark),
-                ),
-                const SizedBox(width: 4),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Palette.primaryDark),
-                ),
-                const SizedBox(width: 4),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Palette.primaryDark),
-                )
-              ],
-            ),
-            const Spacer(),
-            Container(
-              decoration: const BoxDecoration(
-                  color: Palette.primary, shape: BoxShape.circle),
-              child: InkWell(
-                splashColor: Palette.secondary,
-                child: IconButton(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignupScreen())),
-                    icon: const Icon(Icons.chevron_right)),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
