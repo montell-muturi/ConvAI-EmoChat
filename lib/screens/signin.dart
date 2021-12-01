@@ -18,148 +18,144 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Palette.secondary,
       body: SafeArea(
-        child: ScrollConfiguration(
-          behavior: NoScrollGlow(),
-          child: ListView(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            children: [
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height - kToolbarHeight,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 28),
-                child: Column(
-                  children: [
-                    const Header(),
-                    const Spacer(),
-                    Form(
-                        key: _loginFormKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                      borderSide: BorderSide.none),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 18),
-                                  hintText: 'Email',
-                                  hintStyle: const TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black38)),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email address.';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                      borderSide: BorderSide.none),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 18),
-                                  hintText: 'Password',
-                                  hintStyle: const TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black38)),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your password.';
-                                }
-                                if (value.length < 8) {
-                                  return 'Your password is too short!';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        primary: Palette.primary,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 40, vertical: 20),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(100)),
-                                        elevation: 0),
-                                    onPressed: () {
-                                      if (_loginFormKey.currentState!
-                                          .validate()) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text('Logging in...')),
-                                        );
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ChatScreen()));
-                                      }
-                                    },
-                                    child: const Text(
-                                      'LOG IN',
-                                      style: TextStyle(color: Colors.black),
-                                    )))
-                          ],
-                        )),
-                    const Spacer(),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text('or log in with'),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: const [
-                        Spacer(),
-                        Placeholder(
-                          fallbackHeight: 48,
-                          fallbackWidth: 48,
-                        ),
-                        Spacer(),
-                        Placeholder(
-                          fallbackHeight: 48,
-                          fallbackWidth: 48,
-                        ),
-                        Spacer(),
-                      ],
-                    ),
-                    const Spacer(),
-                    RichText(
-                      text: TextSpan(
-                          text: 'Don\'t have an account?',
-                          style: const TextStyle(color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: 'Sign Up',
-                                style: const TextStyle(
-                                    decoration: TextDecoration.underline),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => Navigator.pop(context))
-                          ]),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+        child: ListView(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height - kToolbarHeight,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 28),
+              child: Column(
+                children: [
+                  const Header(),
+                  const Spacer(),
+                  Form(
+                      key: _loginFormKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    borderSide: BorderSide.none),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 18),
+                                hintText: 'Email',
+                                hintStyle: const TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.black38)),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email address.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                    borderSide: BorderSide.none),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 18),
+                                hintText: 'Password',
+                                hintStyle: const TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.black38)),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password.';
+                              }
+                              if (value.length < 8) {
+                                return 'Your password is too short!';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Palette.primary,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40, vertical: 20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      elevation: 0),
+                                  onPressed: () {
+                                    if (_loginFormKey.currentState!
+                                        .validate()) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Logging in...')),
+                                      );
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ChatScreen()));
+                                    }
+                                  },
+                                  child: const Text(
+                                    'LOG IN',
+                                    style: TextStyle(color: Colors.black),
+                                  )))
+                        ],
+                      )),
+                  const Spacer(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Text('or log in with'),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: const [
+                      Spacer(),
+                      Placeholder(
+                        fallbackHeight: 48,
+                        fallbackWidth: 48,
+                      ),
+                      Spacer(),
+                      Placeholder(
+                        fallbackHeight: 48,
+                        fallbackWidth: 48,
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  const Spacer(),
+                  RichText(
+                    text: TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: const TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Sign Up',
+                              style: const TextStyle(
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.pop(context))
+                        ]),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

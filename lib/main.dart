@@ -1,3 +1,4 @@
+import 'package:emochat/constants.dart';
 import 'package:emochat/screens/chat.dart';
 import 'package:emochat/screens/onboarding.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           fontFamily: 'IBMPlexSans',
-          textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16))),
+          textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
+          textSelectionTheme:
+              const TextSelectionThemeData(cursorColor: Palette.primaryDark)),
+      builder: (context, child) {
+        return ScrollConfiguration(behavior: NoScrollGlow(), child: child!);
+      },
       home: Scaffold(
           body: FutureBuilder(
               future: SharedPreferences.getInstance(),
@@ -40,5 +46,13 @@ class MyApp extends StatelessWidget {
                 }
               })),
     );
+  }
+}
+
+class NoScrollGlow extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
