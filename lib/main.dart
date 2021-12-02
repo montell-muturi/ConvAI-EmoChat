@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
           fontFamily: 'IBMPlexSans',
           textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
           textSelectionTheme:
-              const TextSelectionThemeData(cursorColor: Palette.primaryDark)),
+              const TextSelectionThemeData(cursorColor: Palette.primaryDark),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent),
       builder: (context, child) {
         return ScrollConfiguration(behavior: NoScrollGlow(), child: child!);
       },

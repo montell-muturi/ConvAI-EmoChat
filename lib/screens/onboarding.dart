@@ -106,26 +106,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Container(
                       decoration: const BoxDecoration(
                           color: Palette.primary, shape: BoxShape.circle),
-                      child: InkWell(
-                        splashColor: Palette.secondary,
-                        child: _currentPage == 2
-                            ? IconButton(
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignupScreen())),
-                                icon: const Icon(Icons.check))
-                            : IconButton(
-                                onPressed: () {
-                                  controller.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      curve: Curves.ease);
-                                  _currentPage += 1;
-                                },
-                                icon: const Icon(Icons.chevron_right)),
-                      ),
+                      child: _currentPage == 2
+                          ? IconButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SignupScreen())),
+                              icon: const Icon(Icons.check))
+                          : IconButton(
+                              onPressed: () {
+                                controller.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.ease);
+                                _currentPage += 1;
+                              },
+                              icon: const Icon(Icons.chevron_right)),
                     )
                   ],
                 ),

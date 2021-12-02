@@ -1,10 +1,9 @@
 import 'dart:ui';
 
+import 'package:emochat/components/navbars.dart';
 import 'package:emochat/constants.dart';
-import 'package:emochat/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -16,13 +15,12 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final inputController = TextEditingController();
 
-  final messages = List<String>.generate(10000, (i) => "Message $i");
+  final messages = List<String>.generate(1000, (i) => "Message $i");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        // child: Placeholder(),
         child: ClipRRect(
           child: SizedBox(
               width: double.infinity,
@@ -64,42 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                       ),
                     ),
-                    Container(
-                      height: 60,
-                      decoration:
-                          BoxDecoration(color: Palette.secondary, boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: const Offset(0, 0))
-                      ]),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              tooltip: 'Settings',
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SettingsScreen())),
-                              icon: const Icon(Icons.settings)),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SettingsScreen())),
-                            child: SizedBox(
-                              width: 64,
-                              height: double.infinity,
-                              child: SvgPicture.asset(
-                                  'assets/images/happy_ind.svg'),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    const ChatNav(),
                   ])),
                   const SizedBox(height: 16),
                   Padding(
@@ -134,25 +97,22 @@ class _ChatScreenState extends State<ChatScreen> {
                           Container(
                             decoration: const BoxDecoration(
                                 color: Palette.primary, shape: BoxShape.circle),
-                            child: InkWell(
-                              splashColor: Palette.primary,
-                              child: IconButton(
-                                  onPressed: () {
-                                    if (inputController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              duration:
-                                                  Duration(milliseconds: 800),
-                                              content: Text(
-                                                  'Message body is empty!')));
-                                    } else {
-                                      messages.insert(0, inputController.text);
-                                      inputController.clear();
-                                      setState(() {});
-                                    }
-                                  },
-                                  icon: const Icon(Icons.chevron_right)),
-                            ),
+                            child: IconButton(
+                                onPressed: () {
+                                  if (inputController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            duration:
+                                                Duration(milliseconds: 800),
+                                            content:
+                                                Text('Message is empty!')));
+                                  } else {
+                                    messages.insert(0, inputController.text);
+                                    inputController.clear();
+                                    setState(() {});
+                                  }
+                                },
+                                icon: const Icon(Icons.chevron_right)),
                           )
                         ],
                       ),
