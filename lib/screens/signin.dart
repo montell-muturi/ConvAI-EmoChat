@@ -13,8 +13,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _loginFormKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,12 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   const SigninHeader(),
-                  SigninForm(loginFormKey: _loginFormKey),
+                  const SigninForm(),
                   const Spacer(),
                   const Text('or log in with'),
-                  const SizedBox(
-                    height: 32,
-                  ),
+                  const SizedBox(height: 32),
                   const ThirdPartyAuth(),
                   const Spacer(),
                   RichText(

@@ -1,18 +1,28 @@
 import 'package:emochat/constants.dart';
 import 'package:emochat/screens/chat.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
-class SignupForm extends StatelessWidget {
+class SignupForm extends StatefulWidget {
   const SignupForm({
     Key? key,
-    required GlobalKey<FormState> signupFormKey,
-    required TextEditingController passwordController,
-  })  : _signupFormKey = signupFormKey,
-        _passwordController = passwordController,
-        super(key: key);
+  }) : super(key: key);
 
-  final GlobalKey<FormState> _signupFormKey;
-  final TextEditingController _passwordController;
+  @override
+  State<SignupForm> createState() => _SignupFormState();
+}
+
+class _SignupFormState extends State<SignupForm> {
+  final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late UserCredential _userCredential;
+
+  String _email = "";
+  String _password = "";
+  String _firebaseError = "";
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +45,19 @@ class SignupForm extends StatelessWidget {
                       fontStyle: FontStyle.italic, color: Colors.black38)),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your email address :)';
+                  return 'Please enter your email address.';
                 }
+                if (_firebaseError == 'email-already-in-use') {
+                  _firebaseError = '';
+                  return 'The email address is already in use by another account.';
+                }
+                if (_firebaseError == 'invalid-email') {
+                  _firebaseError = '';
+                  return 'The email address is badly formatted.';
+                }
+                setState(() {
+                  _email = value.trim();
+                });
                 return null;
               },
             ),
@@ -61,8 +82,12 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a password.';
                 }
-                if (value.length < 8) {
-                  return 'Your password is too short!';
+                // if (value.length < 8) {
+                //   return 'Your password is too short.';
+                // }
+                if (_firebaseError == 'weak-password') {
+                  _firebaseError = '';
+                  return 'Password should be at least 6 characters.';
                 }
                 return null;
               },
@@ -90,6 +115,9 @@ class SignupForm extends StatelessWidget {
                 if (value != _passwordController.text) {
                   return 'Passwords do not match!';
                 }
+                setState(() {
+                  _password = value.trim();
+                });
                 return null;
               },
             ),
@@ -104,15 +132,25 @@ class SignupForm extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100)),
                         elevation: 0),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_signupFormKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Creating account...')),
-                        );
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ChatScreen()));
+                        try {
+                          _userCredential =
+                              await _auth.createUserWithEmailAndPassword(
+                                  email: _email, password: _password);
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'Account created successfully.')));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ChatScreen()));
+                        } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            _firebaseError = e.code;
+                            _signupFormKey.currentState!.validate();
+                          });
+                        }
                       }
-                    } /*}*/,
+                    },
                     child: const Text(
                       'SIGN UP',
                       style: TextStyle(color: Colors.black),
@@ -122,15 +160,24 @@ class SignupForm extends StatelessWidget {
   }
 }
 
-class SigninForm extends StatelessWidget {
+class SigninForm extends StatefulWidget {
   const SigninForm({
     Key? key,
-    required GlobalKey<FormState> loginFormKey,
-  })  : _loginFormKey = loginFormKey,
-        super(key: key);
+  }) : super(key: key);
 
-  final GlobalKey<FormState> _loginFormKey;
+  @override
+  State<SigninForm> createState() => _SigninFormState();
+}
 
+class _SigninFormState extends State<SigninForm> {
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late UserCredential _userCredential;
+
+  String _email = "";
+  String _password = "";
+  String _firebaseError = "";
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -155,6 +202,17 @@ class SigninForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email address.';
                 }
+                if (_firebaseError == 'user-not-found') {
+                  _firebaseError = '';
+                  return 'There is no user with this email.';
+                }
+                if (_firebaseError == 'invalid-email') {
+                  _firebaseError = '';
+                  return 'The email address is badly formatted.';
+                }
+                setState(() {
+                  _email = value.trim();
+                });
                 return null;
               },
             ),
@@ -178,9 +236,16 @@ class SigninForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password.';
                 }
-                if (value.length < 8) {
-                  return 'Your password is too short!';
+                if (value.length < 6) {
+                  return 'Your password is too short.';
                 }
+                if (_firebaseError == 'wrong-password') {
+                  _firebaseError = '';
+                  return 'The password is incorrect.';
+                }
+                setState(() {
+                  _password = value.trim();
+                });
                 return null;
               },
             ),
@@ -195,13 +260,26 @@ class SigninForm extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100)),
                         elevation: 0),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_loginFormKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Logging in...')),
-                        );
+                        try {
+                          _userCredential =
+                              await _auth.signInWithEmailAndPassword(
+                                  email: _email,
+                                  password: _password);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text('Logging in.')));
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const ChatScreen()));
+                        } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            _firebaseError = e.code;
+                            _loginFormKey.currentState!.validate();
+                          });
+                        }
+
                       }
                     },
                     child: const Text(
