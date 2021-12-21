@@ -8,3 +8,5 @@
 .pub/
 /build
 /assets/fonts
+/android
+/lib/firebase_options.dart
