@@ -9,10 +9,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-<<<<<<< HEAD
   cloud_firestore: ^3.1.5
-=======
->>>>>>> 9e49d8ee83722e152f8c79b3597f889e288492f2
   firebase_auth: ^3.3.4
   firebase_core: ^1.10.6
   fl_chart: ^0.40.2
@@ -23,10 +20,7 @@ dependencies:
   flutter_native_splash: ^1.3.1
   flutter_svg: ^0.23.0+1
   google_sign_in: ^5.2.1
-<<<<<<< HEAD
   provider: ^6.0.1
-=======
->>>>>>> 9e49d8ee83722e152f8c79b3597f889e288492f2
   shared_preferences: ^2.0.9
 
 dev_dependencies:
