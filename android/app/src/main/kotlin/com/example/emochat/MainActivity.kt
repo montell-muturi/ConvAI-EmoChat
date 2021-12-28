@@ -1,4 +1,4 @@
-package com.example.emochat
+package com.emochat.skynet
 
 import io.flutter.embedding.android.FlutterActivity
 

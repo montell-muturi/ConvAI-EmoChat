@@ -8,3 +8,5 @@
 .pub/
 /build
 /assets/fonts
+/android/app/src/main/res/values/strings.xml
+/lib/firebase_options.dart

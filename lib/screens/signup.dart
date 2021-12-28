@@ -14,9 +14,6 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _signupFormKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +29,10 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 children: [
                   const SignupHeader(),
-                  SignupForm(
-                      signupFormKey: _signupFormKey,
-                      passwordController: _passwordController),
+                  const SignupForm(),
                   const Spacer(),
                   const Text('or create with'),
-                  const SizedBox(
-                    height: 32,
-                  ),
+                  const SizedBox(height: 32),
                   const ThirdPartyAuth(),
                   const Spacer(),
                   RichText(
